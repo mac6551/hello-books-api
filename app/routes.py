@@ -16,23 +16,12 @@ books_bp = Blueprint("books", __name__, url_prefix="/books")
 
 @books_bp.route("", methods=["GET"])
 def get_books(): 
-    books_response = []
-    for book in books: 
-        books_response.append({
-            "id": book.id,
-            "title": book.title, 
-            "description": book.description
-        })
+    books_response = [vars(book) for book in books]
     return jsonify(books_response)
 
 @books_bp.route("/<book_id>", methods=["GET"])
 def get_book(book_id): 
     book_id = int(book_id)
-    for book in books: 
-        if book.id == book_id: 
-            return{
-                "id": book.id,
-                "title": book.title, 
-                "description": book.description
-            }
+    return vars(next(b for b in books if b.id == book_id))
+
 
