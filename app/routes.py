@@ -18,17 +18,25 @@ def handle_books():
     
     elif request.method == "GET":
         books = Book.query.all()
-        books_response = [vars(book) for book in books]
+        # books_response = [vars(book) for book in books]
+
+        books_response = [ 
+            {"id": book.id, 
+            "title": book.title, 
+            "description": book.description} 
+            for book in books]
+
         return jsonify(books_response)
 
-# @books_bp.route("", methods=["GET"])
-# def get_books(): 
-#     
+@books_bp.route("/<book_id>", methods=["GET"])
+def handle_book(book_id): 
+    book = Book.query.get(book_id) 
 
-# @books_bp.route("/<book_id>", methods=["GET"])
-# def get_book(book_id): 
-#     book_id = int(book_id)
-#     return vars(next(b for b in books if b.id == book_id))
+    return {
+        "id": book.id, 
+        "title": book.title,
+        "description": book.description
+    }
 
 
 
